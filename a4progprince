@@ -1,0 +1,82 @@
+#include "sequence1.h"
+#include <cassert>
+#include <iostream>
+
+namespace cs2337_23sp_A4
+{
+    sequence::sequence()
+    {
+        used = 0;
+        current_index = 0;
+    }
+
+   void sequence::start()
+   {
+       current_index = 0;
+   }
+
+   void sequence::advance()
+   {
+       assert(is_item());
+       current_index++;
+   }
+
+   void sequence::insert(const value_type& entry)
+   {
+       if(!is_item()) {
+           current_index = 0;
+           for(int i = used + 1; i > current_index; --i){
+               data[i] = data[i-1];
+           }
+           data[current_index] = entry;
+           ++used;
+       } else {
+           for(int i = used + 1; i > current_index; --i){
+               data[i] = data[i-1];
+           }
+           data[current_index] = entry;
+           ++used;
+       }
+   }
+
+   void sequence::attach(const value_type& entry)
+   {
+       if(!is_item()){
+           data[current_index] = entry;
+           used++;
+       } else {
+        current_index++;
+           for (int i = used + 1; i > current_index; --i) {
+               data[i] = data[i-1];
+           }
+           data[current_index] = entry; 
+           ++used;
+       }
+   }
+
+   void sequence::remove_current()
+   {
+       assert(is_item());
+       for (int i = current_index; i < used-1; ++i) {
+           data[i] = data[i + 1];
+       }
+       --used;
+   }
+
+   sequence::size_type sequence::size() const
+   {
+       return used;
+   }
+
+   bool sequence::is_item() const
+   {
+       return (used != current_index);
+   }
+
+   sequence::value_type sequence::current() const
+   {
+       assert(is_item());
+       return data[current_index];
+   }
+
+}
